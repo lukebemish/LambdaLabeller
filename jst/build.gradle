@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'com.gradleup.shadow'
+}
+
+group = 'dev.lukebemish'
+version = '0.1.0'
+
+java {
+    toolchain.languageVersion.set JavaLanguageVersion.of(21)
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+    implementation 'net.neoforged.jst:jst-cli:1.0.63'
+    implementation 'net.neoforged.jst:jst-api:1.0.63'
+    implementation 'org.slf4j:slf4j-simple:2.0.13'
+
+    compileOnly cLibs.bundles.compileonly
+    annotationProcessor cLibs.bundles.annotationprocessor
+}
+
+shadowJar {
+    mergeServiceFiles()
+    manifest {
+        attributes 'Main-Class': 'net.neoforged.jst.cli.Main'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

@@ -1,0 +1,40 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'com.gradleup.shadow'
+}
+
+group = 'dev.lukebemish'
+version = '0.1.0'
+
+java {
+    toolchain.languageVersion.set JavaLanguageVersion.of(21)
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+    implementation 'info.picocli:picocli:4.7.6'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
+    implementation 'org.ow2.asm:asm:9.7'
+    implementation 'org.slf4j:slf4j-simple:2.0.13'
+
+    compileOnly cLibs.bundles.compileonly
+    annotationProcessor cLibs.bundles.annotationprocessor
+}
+
+shadowJar {
+    mergeServiceFiles()
+    manifest {
+        attributes 'Main-Class': 'dev.lukebemish.lambdalabeller.cli.Main'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
