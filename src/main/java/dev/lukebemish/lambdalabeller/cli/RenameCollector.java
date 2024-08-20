@@ -13,7 +13,7 @@ final class RenameCollector extends ClassVisitor {
     final Set<String> unknownNames = new HashSet<>();
     final Map<String, String> renames = new HashMap<>();
 
-    protected RenameCollector() {
+    RenameCollector() {
         super(Opcodes.ASM9);
     }
 
